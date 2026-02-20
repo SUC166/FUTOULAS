@@ -1,6 +1,7 @@
 """
 FUTO Schools and Departments Data (2025/2026)
-Sources: futo.edu.ng, legacy.futo.edu.ng/faculties-departments, JUPEB/PG admission lists
+Source: https://legacy.futo.edu.ng/faculties-departments/
+SPGS and Directorate of General Studies excluded as requested.
 """
 
 # Structure: school_name -> { departments: [...], levels: [...] OR levels_override: {dept: [...]} }
@@ -18,14 +19,14 @@ SCHOOL_DATA = {
         ],
         "levels": ["100", "200", "300", "400", "500"],
     },
-    "School of Basic Medical Sciences (SBMS)": {
+    "School of Basic Medical Science (SBMS)": {
         "departments": [
             "Human Anatomy",
             "Human Physiology",
         ],
         "levels": ["100", "200", "300"],
     },
-    "School of Biological Sciences (SOBS)": {
+    "School of Biological Science (SOBS)": {
         "departments": [
             "Biochemistry",
             "Biology",
@@ -37,35 +38,35 @@ SCHOOL_DATA = {
     },
     "School of Engineering and Engineering Technology (SEET)": {
         "departments": [
-            "Agricultural and Bioresources Engineering",
+            "Agricultural and Bio Resources Engineering",
             "Biomedical Engineering",
             "Chemical Engineering",
             "Civil Engineering",
             "Food Science and Technology",
             "Material and Metallurgical Engineering",
             "Mechanical Engineering",
-            "Mechatronic Engineering",
             "Petroleum Engineering",
             "Polymer and Textile Engineering",
         ],
         "levels": ["100", "200", "300", "400", "500"],
     },
-    "School of Electrical Systems Engineering Technology (SESET)": {
+    "School of Electrical Systems and Engineering Technology (SESET)": {
         "departments": [
             "Computer Engineering",
+            "Electrical (Power Systems) Engineering",
             "Electrical and Electronic Engineering",
             "Electronics Engineering",
             "Mechatronics Engineering",
-            "Power Systems Engineering",
             "Telecommunications Engineering",
         ],
         "levels": ["100", "200", "300", "400", "500"],
     },
-    "School of Environmental Sciences (SOES)": {
+    "School of Environmental Science (SOES)": {
         "departments": [
             "Architecture",
             "Building Technology",
             "Environmental Management",
+            "Environmental Management and Evaluation",
             "Quantity Surveying",
             "Surveying and Geoinformatics",
             "Urban and Regional Planning",
@@ -74,7 +75,6 @@ SCHOOL_DATA = {
     },
     "School of Health Technology (SOHT)": {
         "departments": [
-            "Biomedical Technology",
             "Dental Technology",
             "Environmental Health Science",
             "Optometry",
@@ -83,7 +83,6 @@ SCHOOL_DATA = {
         ],
         "levels_override": {
             "Optometry": ["100", "200", "300", "400", "500", "600"],
-            "Biomedical Technology": ["100", "200", "300", "400"],
             "Dental Technology": ["100", "200", "300", "400"],
             "Environmental Health Science": ["100", "200", "300", "400"],
             "Prosthetics and Orthotics": ["100", "200", "300", "400"],
@@ -102,15 +101,15 @@ SCHOOL_DATA = {
     },
     "School of Logistics and Innovation Technology (SLIT)": {
         "departments": [
-            "Financial Management Technology",
-            "Management Technology",
-            "Maritime Management Technology",
+            "Entrepreneurship and Innovation",
+            "Logistics and Transport Technology",
+            "Maritime Technology and Logistics",
             "Project Management Technology",
-            "Transport Management Technology",
+            "Supply Chain Management",
         ],
         "levels": ["100", "200", "300", "400", "500"],
     },
-    "School of Physical Sciences (SOPS)": {
+    "School of Physical Science (SOPS)": {
         "departments": [
             "Chemistry",
             "Geology",
@@ -120,12 +119,6 @@ SCHOOL_DATA = {
             "Statistics",
         ],
         "levels": ["100", "200", "300", "400"],
-    },
-    "College of Medicine (COMED)": {
-        "departments": [
-            "Medicine and Surgery (MBBS)",
-        ],
-        "levels": ["100", "200", "300", "400", "500", "600"],
     },
 }
 
