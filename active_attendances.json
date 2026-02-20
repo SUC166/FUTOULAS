@@ -8,5 +8,15 @@
     "date": "2026-02-20",
     "start_time": "17-07-01",
     "csv_path": "attendances/School_of_Electrical_Systems_Engineering_Technology_SESET/Electrical_and_Electronic_Engineering/100L/CHM101_2026-02-20_17-07-01.csv"
+  },
+  "School of Engineering and Engineering Technology (SEET)||Material and Metallurgical Engineering||100": {
+    "school": "School of Engineering and Engineering Technology (SEET)",
+    "dept": "Material and Metallurgical Engineering",
+    "level": "100",
+    "course_code": "CHM101",
+    "started_at": 1771609028.2974844,
+    "date": "2026-02-20",
+    "start_time": "17-37-07",
+    "csv_path": "attendances/School_of_Engineering_and_Engineering_Technology_SEET/Material_and_Metallurgical_Engineering/100L/CHM101_2026-02-20_17-37-07.csv"
   }
 }
