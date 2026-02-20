@@ -1,17 +1,12 @@
 """
-GitHub Storage Backend.
-All attendance data lives in a SEPARATE GitHub repo (data repo).
-This avoids Streamlit Cloud reloading the app when data changes,
-since only the app repo triggers rebuilds.
+GitHub Storage Backend for FUTO ULAS.
 
-Setup:
-  - Create a SEPARATE repo for data (e.g. "yourusername/futo-attendance-data")
-  - Set GITHUB_TOKEN and GITHUB_REPO (data repo) in Streamlit secrets
-  - The app repo contains only code
+All attendance data lives in a SEPARATE GitHub data repo.
+This prevents Streamlit Cloud from reloading the app on data changes.
 
 Streamlit secrets.toml:
-  GITHUB_TOKEN = "ghp_xxxxx"
-  GITHUB_REPO  = "yourusername/futo-attendance-data"
+  GITHUB_TOKEN  = "ghp_xxxxx"
+  GITHUB_REPO   = "yourusername/futo-attendance-data"
   GITHUB_BRANCH = "main"
 """
 
@@ -22,15 +17,14 @@ import requests
 import streamlit as st
 
 
-@st.cache_data(ttl=0)
 def _get_config():
     try:
-        token = st.secrets["GITHUB_TOKEN"]
-        repo = st.secrets["GITHUB_REPO"]
+        token  = st.secrets["GITHUB_TOKEN"]
+        repo   = st.secrets["GITHUB_REPO"]
         branch = st.secrets.get("GITHUB_BRANCH", "main")
     except Exception:
-        token = os.environ.get("GITHUB_TOKEN", "")
-        repo = os.environ.get("GITHUB_REPO", "")
+        token  = os.environ.get("GITHUB_TOKEN", "")
+        repo   = os.environ.get("GITHUB_REPO", "")
         branch = os.environ.get("GITHUB_BRANCH", "main")
     return token, repo, branch
 
@@ -50,22 +44,23 @@ def _api_url(path):
 
 
 def read_file(path):
-    """Read a file. Returns (content_str, sha) or (None, None)."""
+    """Returns (content_str, sha) or (None, None)."""
     _, _, branch = _get_config()
     resp = requests.get(_api_url(path), headers=_headers(), params={"ref": branch}, timeout=15)
     if resp.status_code == 404:
         return None, None
     resp.raise_for_status()
     data = resp.json()
-    content = base64.b64decode(data["content"]).decode("utf-8")
-    return content, data["sha"]
+    return base64.b64decode(data["content"]).decode("utf-8"), data["sha"]
 
 
 def write_file(path, content_str, message, sha=None):
-    """Create or update a file. Returns True on success."""
     _, _, branch = _get_config()
-    encoded = base64.b64encode(content_str.encode("utf-8")).decode("utf-8")
-    payload = {"message": message, "content": encoded, "branch": branch}
+    payload = {
+        "message": message,
+        "content": base64.b64encode(content_str.encode("utf-8")).decode("utf-8"),
+        "branch": branch,
+    }
     if sha:
         payload["sha"] = sha
     resp = requests.put(_api_url(path), headers=_headers(), json=payload, timeout=20)
@@ -86,25 +81,26 @@ def write_json(path, data, message, sha=None):
 
 
 def list_files_in_dir(path_prefix):
-    """List all blob paths under a directory prefix."""
     _, repo, branch = _get_config()
     url = f"https://api.github.com/repos/{repo}/git/trees/{branch}"
     resp = requests.get(url, headers=_headers(), params={"recursive": "1"}, timeout=20)
     if resp.status_code != 200:
         return []
-    tree = resp.json().get("tree", [])
-    return [item["path"] for item in tree
+    return [item["path"] for item in resp.json().get("tree", [])
             if item["path"].startswith(path_prefix) and item["type"] == "blob"]
 
 
 # ─── Attendance helpers ───────────────────────────────────────────────────────
 
-ACTIVE_PATH = "active_attendances.json"
+ACTIVE_PATH    = "active_attendances.json"
+PASSWORDS_PATH = "rep_passwords.json"
 ATTENDANCES_ROOT = "attendances"
 
 
 def _safe(s):
-    return s.replace("/", "_").replace(" ", "_").replace("(", "").replace(")", "").replace(",", "")
+    for ch in ["/", " ", "(", ")", ","]:
+        s = s.replace(ch, "_")
+    return s
 
 
 def att_dir(school, dept, level):
@@ -125,9 +121,8 @@ def set_active_attendances(data, sha=None):
 
 
 def get_csv_path(school, dept, level, course_code, date_str, time_str):
-    directory = att_dir(school, dept, level)
-    filename = f"{course_code.replace(' ', '_')}_{date_str}_{time_str}.csv"
-    return f"{directory}/{filename}"
+    safe_code = course_code.replace(" ", "_")
+    return f"{att_dir(school, dept, level)}/{safe_code}_{date_str}_{time_str}.csv"
 
 
 def get_devices_path(csv_path):
@@ -136,5 +131,13 @@ def get_devices_path(csv_path):
 
 def list_attendance_csvs(school, dept, level):
     prefix = att_dir(school, dept, level)
-    all_files = list_files_in_dir(prefix)
-    return sorted([f for f in all_files if f.endswith(".csv")], reverse=True)
+    return sorted([f for f in list_files_in_dir(prefix) if f.endswith(".csv")], reverse=True)
+
+
+def get_custom_passwords():
+    data, sha = read_json(PASSWORDS_PATH)
+    return (data or {}), sha
+
+
+def set_custom_passwords(data, sha=None):
+    return write_json(PASSWORDS_PATH, data, "Update rep passwords", sha)

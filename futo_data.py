@@ -1,10 +1,9 @@
 """
 FUTO Schools and Departments Data (2025/2026)
 Source: https://legacy.futo.edu.ng/faculties-departments/
-SPGS and Directorate of General Studies excluded as requested.
+SPGS and Directorate of General Studies excluded.
 """
 
-# Structure: school_name -> { departments: [...], levels: [...] OR levels_override: {dept: [...]} }
 SCHOOL_DATA = {
     "School of Agriculture and Agricultural Technology (SAAT)": {
         "departments": [
@@ -54,7 +53,6 @@ SCHOOL_DATA = {
         "departments": [
             "Computer Engineering",
             "Electrical (Power Systems) Engineering",
-            "Electrical and Electronic Engineering",
             "Electronics Engineering",
             "Mechatronics Engineering",
             "Telecommunications Engineering",
@@ -82,11 +80,11 @@ SCHOOL_DATA = {
             "Public Health Technology",
         ],
         "levels_override": {
-            "Optometry": ["100", "200", "300", "400", "500", "600"],
-            "Dental Technology": ["100", "200", "300", "400"],
+            "Optometry":                ["100", "200", "300", "400", "500", "600"],
+            "Dental Technology":         ["100", "200", "300", "400"],
             "Environmental Health Science": ["100", "200", "300", "400"],
             "Prosthetics and Orthotics": ["100", "200", "300", "400"],
-            "Public Health Technology": ["100", "200", "300", "400"],
+            "Public Health Technology":  ["100", "200", "300", "400"],
         },
         "levels": ["100", "200", "300", "400"],
     },
